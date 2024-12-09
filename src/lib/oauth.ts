@@ -35,6 +35,7 @@ export async function getAzureAccessToken(username: string, password: string) {
   const AZURE_AD_CLIENT_ID = getEnvVariable("AZURE_AD_CLIENT_ID");
   const AZURE_AD_CLIENT_SECRET = getEnvVariable("AZURE_AD_CLIENT_SECRET");
   const SCOPE = getEnvVariable("SCOPE");
+  
 
   try {
     const response = await axios.post(
@@ -66,6 +67,7 @@ export async function getNewTokenWithScope(username: string, password: string) {
   const OAUTH_SERVER_URL = getEnvVariable("OAUTH_SERVER_URL");
   const AZURE_AD_CLIENT_ID = getEnvVariable("AZURE_AD_CLIENT_ID");
   const AZURE_AD_CLIENT_SECRET = getEnvVariable("AZURE_AD_CLIENT_SECRET");
+ const  SCOPEBACK = getEnvVariable("SCOPEBACK");
   
 
   try {
@@ -76,7 +78,7 @@ export async function getNewTokenWithScope(username: string, password: string) {
         grant_type: "password",// Correct grant type for client credentials flow
         client_id: AZURE_AD_CLIENT_ID, // Your Azure AD client ID
         client_secret: AZURE_AD_CLIENT_SECRET, // Your Azure AD client secret
-        scope: "offline_access api://24dfb5c5-1fa4-44e4-97c6-daf83e7b3227/read_data", // New scope for the new token
+        scope: `offline_access ${SCOPEBACK}`, // New scope for the new token
         username: username, // User's username
         password: password, // User's password
       }).toString(), // URLSearchParams formats the body as application/x-www-form-urlencoded
@@ -101,6 +103,7 @@ export async function refreshToken(refreshToken: string):Promise<{ access_token:
   const OAUTH_SERVER_URL = getEnvVariable("OAUTH_SERVER_URL");
   const AZURE_AD_CLIENT_ID = getEnvVariable("AZURE_AD_CLIENT_ID");
   const AZURE_AD_CLIENT_SECRET = getEnvVariable("AZURE_AD_CLIENT_SECRET");
+  const  SCOPEBACK = getEnvVariable("SCOPEBACK");
   try {
     const response = await axios.post(
       OAUTH_SERVER_URL,
@@ -109,7 +112,7 @@ export async function refreshToken(refreshToken: string):Promise<{ access_token:
         client_id: AZURE_AD_CLIENT_ID, // Your Azure AD client ID
         client_secret: AZURE_AD_CLIENT_SECRET, // Your Azure AD client secret
         grant_type: "refresh_token",
-        scope: "offline_access api://24dfb5c5-1fa4-44e4-97c6-daf83e7b3227/read_data", 
+        scope: `offline_access ${SCOPEBACK}`, 
         refresh_token: refreshToken ,// New scope for the new token
        
       }).toString(), // URLSearchParams formats the body as application/x-www-form-urlencoded
